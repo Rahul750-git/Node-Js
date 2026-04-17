@@ -1,7 +1,10 @@
 const express = require("express");
 const app = express();
+const mongoose = require("mongoose");
 const PORT = 3000;
 
+//Database connection
+// mongoose.connect()
 //Middleware
 app.set("view engine","ejs")
 app.use(express.urlencoded({extended:false}))
