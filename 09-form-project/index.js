@@ -22,6 +22,11 @@ app.post("/create", (req, res) => {
 
 });
 
+app.get("/file/:filename", (req, res) => {
+  fs.readFile(`./files/${req.params.filename}`,"utf-8",function(err,filedata){
+    res.render('show',{filename: req.params.filename,filedata:filedata});
+  })
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
