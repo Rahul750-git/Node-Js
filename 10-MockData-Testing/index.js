@@ -12,6 +12,10 @@ app.listen(PORT, (req, res) => {
   console.log(`Server is running for http://localhost:${PORT}`);
 });
 
+app.get('/',(req,res)=>{
+  res.send("This is a Home Page")
+})
+
 //RestFul Api
 app.get("/api/users", (req, res) => {
   res.json(users);
@@ -49,6 +53,7 @@ app.post('/api/users',(req,res)=>{
   users.push({...body,id: users.length+1})
   fs.writeFile('./MOCK_DATA.json',JSON.stringify(users),(err,data)=>{
   res.json({status:'success', id: users.length});
+
   })
    
 })
