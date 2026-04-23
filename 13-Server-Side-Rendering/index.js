@@ -29,6 +29,9 @@ const PORT = 3000
       email,
       image
    })
-   res.send(createdUser)
+   res.redirect('/read')
  })
-
+app.get("/delete/:id", async (req, res) => {
+  let users = await userModal.findOneAndDelete({ _id: req.params.id });
+  res.redirect('/read');
+});
