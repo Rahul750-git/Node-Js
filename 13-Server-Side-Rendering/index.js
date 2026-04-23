@@ -35,3 +35,15 @@ app.get("/delete/:id", async (req, res) => {
   let users = await userModal.findOneAndDelete({ _id: req.params.id });
   res.redirect('/read');
 });
+
+app.get("/edit/:userid", async (req, res) => {
+  let user = await userModal.findOne({ _id: req.params.userid });
+  res.render('edit',{user});
+});
+
+app.post("/update/:userid", async (req, res) => {
+   let {image,name,email} = req.body;
+  let user = await userModal.findOneAndUpdate({ _id: req.params.userid },{image ,name,email},{new:true});
+
+  res.redirect('/read');
+});
