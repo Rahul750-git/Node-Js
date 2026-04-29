@@ -5,6 +5,11 @@ const mongoose = require('mongoose');
     name : String,
     age : Number,
     email: String,
-    password : String
+    password : String ,
+    posts:[
+             {type: mongoose.Schema.Types.ObjectId,
+              ref: 'post'
+             }
+    ]
   })
- m
+ module.exports = mongoose.model('user', userSchema);
