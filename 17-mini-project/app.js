@@ -5,6 +5,8 @@ const postModal = require("./models/post");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const user = require("./models/user");
+const post = require("./models/post");
 
 app.use(express.json());
 app.set("view engine", "ejs");
@@ -51,7 +53,7 @@ app.post("/login", async (req, res) => {
     if (result) {
       let token = jwt.sign({ email: email, userid: user._id }, "ssssssssssss");
       res.cookie("token", token);
-      res.status(200).send('you can login')
+      res.status(200).redirect("/profile")
     } else{
        res.redirect("/login");
     }
@@ -62,20 +64,41 @@ app.get("/logout", (req, res) => {
   res.cookie("token", "").redirect("/login");
 });
 
-app.get("/profile",isLoggedIn, (req, res) => {
-  res.render('login')
+app.get("/profile",isLoggedIn, async (req, res) => {
+  let user = await userModal.findOne({email: req.user.email })
+  user.populate("posts")
+  res.render('profile',{user})
 });
+
+app.get("/post",isLoggedIn, async (req, res) => {
+  let user = await userModal.findOne({email: req.user.email })
+  let {content} = req.body
+
+
+ let post = await postModal.create({
+    user: user._id,
+    content 
+  })
+ 
+
+  user.post.push(post._id)
+ await user.save()
+ res.redirect('/profile')
+});
+
 
 
 function isLoggedIn(req, res, next) {
   if (req.cookies.token === "") {
-    res.send("you must be logged in");
+    res.redirect("/login");
   } else {
     let data = jwt.verify(req.cookies.token, "ssssssssssss");
     req.user = data;
     next();
   }
 }
+
+
 app.listen(3000, (req, res) => {
-  console.log("Server is running on port http://localhost:3000");
+  console.log("Server is running  http://localhost:3000");
 });
